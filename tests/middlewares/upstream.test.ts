@@ -15,3 +15,19 @@ test('upstream -> basic', async () => {
   expect(response.status).toBe(200);
   expect(response.url).toBe('https://httpbin.org/get');
 });
+
+test('upstream -> with collection of paths', async () => {
+  const request = new Request(
+    'https://localhost/get',
+  );
+
+  const reflare = await useReflare();
+  reflare.push({
+    path: ['/foo', '/bar', '/get'],
+    upstream: { domain: 'httpbin.org' },
+  });
+
+  const response = await reflare.handle(request);
+  expect(response.status).toBe(200);
+  expect(response.url).toBe('https://httpbin.org/get');
+});
