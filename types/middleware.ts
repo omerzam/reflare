@@ -7,6 +7,8 @@ export interface Context {
   request: Request;
   response: Response;
   upstream: UpstreamOptions | null;
+  onResponse?: (k: Response, url: string) => Response;
+  onRequest?: (k: Request, url: string) => Request;
 }
 
 export type Middleware = (
