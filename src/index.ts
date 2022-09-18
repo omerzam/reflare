@@ -93,6 +93,8 @@ const useReflare = async (
       hostname: getHostname(request),
       response: new Response('Unhandled response'),
       upstream: null,
+      onResponse: route.onResponse,
+      onRequest: route.onRequest,
     };
 
     try {
