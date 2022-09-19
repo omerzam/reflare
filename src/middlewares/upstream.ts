@@ -49,7 +49,7 @@ export const useUpstream: Middleware = async (
   context,
   next,
 ) => {
-  const { request, upstream } = context;
+  const { request, upstream, onRequest, onResponse } = context;
   if (upstream === null) {
     await next();
     return;
@@ -60,11 +60,16 @@ export const useUpstream: Middleware = async (
     upstream,
   );
 
-  const upstreamRequest = cloneRequest(
-    url,
-    request,
-  );
+  const upstreamRequest = onRequest
+    ? onRequest(cloneRequest(url, request), url)
+    : cloneRequest(url, request);
+
   context.response = await fetch(upstreamRequest);
+
+  if (onResponse) {
+    const newResponse = new Response(context.response.body, context.response);
+    context.response = onResponse(newResponse, url);
+  }
 
   await next();
 };

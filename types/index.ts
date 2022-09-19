@@ -14,6 +14,8 @@ export interface Route {
   headers?: HeadersOptions;
   methods?: string[],
   loadBalancing?: LoadBalancingOptions,
+  onResponse?: (k: Response, url: string) => Response;
+  onRequest?: (k: Request, url: string) => Request;
 }
 
 export type RouteList = Route[];
